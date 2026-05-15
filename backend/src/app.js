@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import AppError from './utils/AppError.js';
 import globalErrorHandler from './middlewares/error.middleware.js';
+import repositoryRoutes from './routes/repository.routes.js';
 
 const app = express();
 
@@ -15,6 +16,8 @@ app.use(express.json());
 app.get('/', (req, res) => {
   res.json({ message: "Dir Collaboration API" });
 });
+
+app.use('/api/repos', repositoryRoutes);
 
 // Handle undefined routes
 app.all('*', (req, res, next) => {

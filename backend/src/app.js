@@ -1,7 +1,9 @@
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const morgan = require('morgan');
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import morgan from 'morgan';
+import AppError from './utils/AppError.js';
+import globalErrorHandler from './middlewares/error.middleware.js';
 
 const app = express();
 
@@ -14,4 +16,12 @@ app.get('/', (req, res) => {
   res.json({ message: "Dir Collaboration API" });
 });
 
-module.exports = app;
+// Handle undefined routes
+app.all('*', (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
+});
+
+// Global error handler
+app.use(globalErrorHandler);
+
+export default app;
